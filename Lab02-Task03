@@ -1,0 +1,31 @@
+.text
+.globl main
+main:
+ li x5, 0x200
+ addi x22, x0, 0 # i'th index initialized in 22 reg
+ addi x23, x0, 0 #sum initialized in 23 reg
+ addi x6, x0, 10 #since we need the loop to run till the 10th i we
+will use register 6 to check equality in the loop
+ addi x7, x0, 1 #the int 1 that we'll use to increment the loop
+loop1:
+ beq x22, x6, Exit
+ slli x28, x22, 2 #the reason for this is because it will multiply
+i*4, and we need to do this because an int is takes 4 bytes of space
+ add x29, x5, x28 #What this will do is that the offset value from
+28 will be stored in x29.
+ sw x22, 0(x29) #Storing integer values into the memory address
+ add x22, x22, x7 #incrementing i by 1
+ j loop1
+Exit:
+ addi x22, x0, 0 #resetting i to the 0th index
+loop2:
+ beq x22, x6, Exit2
+ slli x28, x22, 2
+ add x29, x5, x28
+ lw x28, 0(x29) #everything in loop2 up to this point is
+indentical, but here we just load the indexes we created in loop1
+ add x23, x23, x28 #now summing the values sum+=a[i]
+ add x22, x22, x7
+Exit2:
+end:
+ j end
