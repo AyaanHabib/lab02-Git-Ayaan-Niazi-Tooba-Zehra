@@ -1,0 +1,27 @@
+.text
+.globl main
+main:
+ li x5, 3 #a
+ li x6, 4 #b
+ li x7, 0 #i
+ li x29, 0 #j
+ li x30, 0 #temp
+ # x10 holds the base address and needs no initialization
+ Loopi:
+    bge x7, x5, Exit #if i>=a then exit
+    li x29, 0 # j=0 to restart inner loop
+ Loopj:
+  bge x29, x6, Nexti #if j >= b thwn exit
+  add x30, x7, x29 #i+j
+  slli x31, x29, 2 #offset=4*j
+  add x31, x10, x31 #address=array base+offset
+  sw x30, 0(x31) #store i+j at D[4*j]
+  addi x29, x29, 1 #j incremented
+  j Loopj
+
+ Nexti:
+   addi x7, x7, 1 #i incremented
+   j Loopi
+
+ Exit:
+   j Exit
